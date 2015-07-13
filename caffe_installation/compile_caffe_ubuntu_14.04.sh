@@ -36,7 +36,7 @@ sudo apt-get install python-numpy
 sudo apt-get install -y gfortran # required by scipy
 sudo pip install scipy # required by scikit-image
 sudo apt-get install -y python-scipy # in case pip failed
-sudo apt-get install python-nose
+sudo apt-get install -y python-nose
 #sudo chmod 777 /usr/local/man/man1/ # http://stackoverflow.com/questions/22753738/pip-install-matplotlib-error-error-usr-local-man-man1-nosetests-1-permission 
 sudo pip install scikit-image # to fix https://github.com/BVLC/caffe/issues/50
 
