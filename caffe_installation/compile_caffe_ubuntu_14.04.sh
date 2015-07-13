@@ -1,9 +1,12 @@
-# To install caffe and pycaffe on Ubuntu 14.04 x64 (also tested on Kubunty 14.10 x64). CPU only.
-# TODO: define number of CPUs + ROOTDIR for caffe
+# To install caffe and pycaffe on Ubuntu 14.04 x64 (also tested on Kubunty 14.10 x64). CPU only
+# Usage: Execute "./compile_caffe_ubuntu_14.04.sh", wait for it to finish (~30 to 60 minutes), then open a new shell.
+
 
 #http://caffe.berkeleyvision.org/install_apt.html : (general install info: http://caffe.berkeleyvision.org/installation.html)
-sudo apt-get update -y
-sudo apt-get upgrade -y
+sudo apt-get update
+#sudo apt-get upgrade -y # If you are OK getting prompted
+sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -q -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" # If you are OK with all defaults
+
 sudo apt-get install -y libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev
 sudo apt-get install -y --no-install-recommends libboost-all-dev
 sudo apt-get install -y libatlas-base-dev 
@@ -32,7 +35,11 @@ sudo pip install numpy
 sudo apt-get install python-numpy
 sudo apt-get install -y gfortran # required by scipy
 sudo pip install scipy # required by scikit-image
+sudo apt-get install -y python-scipy # in case pip failed
+sudo apt-get install python-nose
+#sudo chmod 777 /usr/local/man/man1/ # http://stackoverflow.com/questions/22753738/pip-install-matplotlib-error-error-usr-local-man-man1-nosetests-1-permission 
 sudo pip install scikit-image # to fix https://github.com/BVLC/caffe/issues/50
+
 
 # Get caffe (http://caffe.berkeleyvision.org/installation.html#compilation)
 cd
@@ -41,31 +48,35 @@ cd caffe
 wget https://github.com/BVLC/caffe/archive/master.zip
 unzip -o master.zip
 cd caffe-master
-mkdir build
-cd build
 
 # Prepare Python binding (pycaffe)
 cd python
 for req in $(cat requirements.txt); do sudo pip install $req; done
-echo "export PYTHONPATH=$(pwd):$PYTHONPATH " >> ~/.bash_profile # to be able to call "import caffe" from Python
+echo "export PYTHONPATH=$(pwd):$PYTHONPATH " >> ~/.bash_profile # to be able to call "import caffe" from Python after reboot
 source ~/.bash_profile # Update shell 
 cd ..
 
 # Compile caffe and pycaffe
-cd ..
 cp Makefile.config.example Makefile.config
 sed -i '8s/.*/CPU_ONLY := 1/' Makefile.config # CPU only
+mkdir build
 cd build
 cmake ..
+cd ..
 sudo make
-sudo make all -j4 # 4 is the number of parallel threads for compilation
-#make pycaffe
+sudo make all -j4 # 4 is the number of parallel threads for compilation 
+sudo make pycaffe
 sudo make test
 sudo make runtest
 #make matcaffe
 sudo make distribute
-cd ..
 
 # Franck bonus for other work
 sudo pip install pydot
 sudo apt-get install -y graphviz
+sudo pip install scikit-learn
+
+# At the end, you need to run "source ~/.bash_profile" manually or start a new shell to be able to do 'python import caffe', 
+# because one cannot source in a bash script. (http://stackoverflow.com/questions/16011245/source-files-in-a-bash-script)
+
+# TODO: define number of CPUs + ROOTDIR for caffe
