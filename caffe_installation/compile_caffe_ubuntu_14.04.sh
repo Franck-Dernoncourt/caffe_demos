@@ -27,7 +27,7 @@ sudo make
 sudo make install
 
 # Pre-requisites Franck
-sudo apt-get install -y cmake unzip
+sudo apt-get install -y cmake unzip doxygen
 sudo apt-get install -y protobuf-compiler
 sudo apt-get install -y libffi-dev python-dev build-essential
 sudo pip install lmdb
@@ -80,3 +80,21 @@ sudo pip install scikit-learn
 # because one cannot source in a bash script. (http://stackoverflow.com/questions/16011245/source-files-in-a-bash-script)
 
 # TODO: define number of CPUs + ROOTDIR for caffe
+
+# Install OpenBLAS
+sudo apt-get install -y libopenblas-dev
+export OPENBLAS_NUM_THREADS=4
+
+# or
+cd ~/src
+git clone https://github.com/xianyi/OpenBLAS
+cd OpenBLAS
+make FC=gfortran
+sudo make PREFIX=/opt/openblas install
+
+
+
+
+
+
+
