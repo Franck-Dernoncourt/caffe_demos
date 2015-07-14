@@ -64,8 +64,8 @@ cd build
 cmake ..
 cd ..
 sudo make
-sudo make all -j4 # 4 is the number of parallel threads for compilation 
-sudo make pycaffe
+sudo make all -j4 # 4 is the number of parallel threads for compilation: typically equal to number of physical cores
+sudo make pycaffe -j4
 sudo make test
 sudo make runtest
 #make matcaffe
