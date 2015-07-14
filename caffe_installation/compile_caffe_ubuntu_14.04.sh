@@ -27,7 +27,7 @@ sudo make
 sudo make install
 
 # Pre-requisites Franck
-sudo apt-get install -y cmake
+sudo apt-get install -y cmake unzip
 sudo apt-get install -y protobuf-compiler
 sudo apt-get install -y libffi-dev python-dev build-essential
 sudo pip install lmdb
