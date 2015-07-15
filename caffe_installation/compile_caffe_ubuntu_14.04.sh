@@ -1,6 +1,10 @@
 # To install caffe and pycaffe on Ubuntu 14.04 x64 (also tested on Kubunty 14.10 x64). CPU only
-# Usage: Execute "./compile_caffe_ubuntu_14.04.sh", wait for it to finish (~30 to 60 minutes), then open a new shell.
-
+# Usage: 
+# 0. Set up here how many cores you want to to use during installation:
+# By default Caffe will use all these cores.
+NUMBER_OF_CORES=4
+# 1. Execute "./compile_caffe_ubuntu_14.04.sh" (~30 to 60 minutes on a new Ubuntu).
+# 3. Open a new shell (or run "source ~/.bash_profile").
 
 #http://caffe.berkeleyvision.org/install_apt.html : (general install info: http://caffe.berkeleyvision.org/installation.html)
 sudo apt-get update
@@ -58,18 +62,22 @@ cd ..
 
 # Compile caffe and pycaffe
 cp Makefile.config.example Makefile.config
-sed -i '8s/.*/CPU_ONLY := 1/' Makefile.config # CPU only
+sed -i '8s/.*/CPU_ONLY := 1/' Makefile.config # Line 8: CPU only
+sudo apt-get install -y libopenblas-dev
+sed -i '33s/.*/BLAS := open/' Makefile.config # Line 33: to use OpenBLAS
+# Note that if one day the Makefile.config changes and these line numbers change, we're screwed
+# Maybe it would be best to simply append those changes at the end of Makefile.config 
+echo "export OPENBLAS_NUM_THREADS=($NUMBER_OF_CORES)" >> ~/.bash_profile 
 mkdir build
 cd build
 cmake ..
 cd ..
-sudo make
-sudo make all -j4 # 4 is the number of parallel threads for compilation: typically equal to number of physical cores
-sudo make pycaffe -j4
-sudo make test
-sudo make runtest
+make all -j$NUMBER_OF_CORES # 4 is the number of parallel threads for compilation: typically equal to number of physical cores
+make pycaffe -j$NUMBER_OF_CORES
+make test
+make runtest
 #make matcaffe
-sudo make distribute
+make distribute
 
 # Franck bonus for other work
 sudo pip install pydot
@@ -79,18 +87,13 @@ sudo pip install scikit-learn
 # At the end, you need to run "source ~/.bash_profile" manually or start a new shell to be able to do 'python import caffe', 
 # because one cannot source in a bash script. (http://stackoverflow.com/questions/16011245/source-files-in-a-bash-script)
 
-# TODO: define number of CPUs + ROOTDIR for caffe
-
-# Install OpenBLAS
-sudo apt-get install -y libopenblas-dev
-export OPENBLAS_NUM_THREADS=4
-
-# or
-cd ~/src
-git clone https://github.com/xianyi/OpenBLAS
-cd OpenBLAS
-make FC=gfortran
-sudo make PREFIX=/opt/openblas install
+# Misc:
+# To install from GitHub OpenBLAS:
+#cd ~/src
+#git clone https://github.com/xianyi/OpenBLAS
+#cd OpenBLAS
+#make FC=gfortran
+#sudo make PREFIX=/opt/openblas install
 
 
 
