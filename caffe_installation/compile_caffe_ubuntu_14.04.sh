@@ -1,6 +1,6 @@
-# To install caffe and pycaffe on Ubuntu 14.04 x64 (also tested on Kubunty 14.10 x64). CPU only
+# To install caffe and pycaffe on Ubuntu 14.04 x64 (also tested on Kubuntu 14.10 x64). CPU only
 # Usage: 
-# 0. Set up here how many cores you want to to use during installation:
+# 0. Set up here how many cores you want to use during the installation:
 # By default Caffe will use all these cores.
 NUMBER_OF_CORES=4
 # 1. Execute "./compile_caffe_ubuntu_14.04.sh" (~30 to 60 minutes on a new Ubuntu).
@@ -79,7 +79,7 @@ make runtest
 #make matcaffe
 make distribute
 
-# Franck bonus for other work
+# Franck bonus for other work with pycaffe
 sudo pip install pydot
 sudo apt-get install -y graphviz
 sudo pip install scikit-learn
@@ -94,10 +94,5 @@ sudo pip install scikit-learn
 #cd OpenBLAS
 #make FC=gfortran
 #sudo make PREFIX=/opt/openblas install
-
-
-
-
-
 
 
