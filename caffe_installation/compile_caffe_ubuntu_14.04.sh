@@ -1,12 +1,14 @@
-# To install caffe and pycaffe on Ubuntu 14.04 x64 (also tested on Kubuntu 14.10 x64). CPU only
+# This script installs Caffe and pycaffe on Ubuntu 14.04 x64 or 14.10 x64. CPU only, multi-threaded Caffe.
 # Usage: 
 # 0. Set up here how many cores you want to use during the installation:
 # By default Caffe will use all these cores.
 NUMBER_OF_CORES=4
-# 1. Execute "./compile_caffe_ubuntu_14.04.sh" (~30 to 60 minutes on a new Ubuntu).
-# 3. Open a new shell (or run "source ~/.bash_profile").
+# 1. Execute this script, e.g. "bash compile_caffe_ubuntu_14.04.sh" (~30 to 60 minutes on a new Ubuntu).
+# 2. Open a new shell (or run "source ~/.bash_profile"). You're done. You can try 
+#    running "import caffe" from the Python interpreter to test.
 
 #http://caffe.berkeleyvision.org/install_apt.html : (general install info: http://caffe.berkeleyvision.org/installation.html)
+cd
 sudo apt-get update
 #sudo apt-get upgrade -y # If you are OK getting prompted
 sudo DEBIAN_FRONTEND=noninteractive apt-get upgrade -y -q -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" # If you are OK with all defaults
@@ -20,28 +22,28 @@ sudo apt-get install -y python-pip git
 # For Ubuntu 14.04
 sudo apt-get install -y libgflags-dev libgoogle-glog-dev liblmdb-dev protobuf-compiler 
 
-# lmdb
+# LMDB
+# https://github.com/BVLC/caffe/issues/2729: Temporarily broken link to the LMDB repository #2729
 #git clone https://gitorious.org/mdb/mdb.git
 #cd mdb/libraries/liblmdb
 #make && make install 
 
-git clone https://github.com/LMDB/lmdb.git
+git clone https://github.com/LMDB/lmdb.git 
 cd lmdb/libraries/liblmdb
 sudo make 
 sudo make install
 
-# Pre-requisites Franck
+# More pre-requisites 
 sudo apt-get install -y cmake unzip doxygen
 sudo apt-get install -y protobuf-compiler
 sudo apt-get install -y libffi-dev python-dev build-essential
 sudo pip install lmdb
 sudo pip install numpy
-sudo apt-get install python-numpy
+sudo apt-get install -y python-numpy
 sudo apt-get install -y gfortran # required by scipy
 sudo pip install scipy # required by scikit-image
 sudo apt-get install -y python-scipy # in case pip failed
 sudo apt-get install -y python-nose
-#sudo chmod 777 /usr/local/man/man1/ # http://stackoverflow.com/questions/22753738/pip-install-matplotlib-error-error-usr-local-man-man1-nosetests-1-permission 
 sudo pip install scikit-image # to fix https://github.com/BVLC/caffe/issues/50
 
 
@@ -79,20 +81,10 @@ make runtest
 #make matcaffe
 make distribute
 
-# Franck bonus for other work with pycaffe
+# Bonus for other work with pycaffe
 sudo pip install pydot
 sudo apt-get install -y graphviz
 sudo pip install scikit-learn
 
 # At the end, you need to run "source ~/.bash_profile" manually or start a new shell to be able to do 'python import caffe', 
 # because one cannot source in a bash script. (http://stackoverflow.com/questions/16011245/source-files-in-a-bash-script)
-
-# Misc:
-# To install from GitHub OpenBLAS:
-#cd ~/src
-#git clone https://github.com/xianyi/OpenBLAS
-#cd OpenBLAS
-#make FC=gfortran
-#sudo make PREFIX=/opt/openblas install
-
-
