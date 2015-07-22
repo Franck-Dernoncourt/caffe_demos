@@ -1,0 +1,68 @@
+name: "IrisNet"
+layer {
+  name: "iris"
+  type: "HDF5Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TRAIN
+  }
+  hdf5_data_param {
+    source: "iris_train_data.txt"
+    batch_size: 1
+
+  }
+}
+
+layer {
+  name: "iris"
+  type: "HDF5Data"
+  top: "data"
+  top: "label"
+  include {
+    phase: TEST
+  }
+  hdf5_data_param {
+    source: "iris_test_data.txt"
+    batch_size: 1
+
+  }
+}
+
+
+
+
+layer {
+  name: "ip1"
+  type: "InnerProduct"
+  bottom: "data"
+  top: "ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 2
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}
+
+
+
+layer {
+  name: "loss"
+  type: "SoftmaxWithLoss"
+  #type: "SigmoidCrossEntropyLoss" 
+  # type: "EuclideanLoss" 
+  # type: "HingeLoss"  
+  bottom: "ip1"
+  bottom: "label"
+  top: "loss"
+}

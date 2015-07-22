@@ -1,0 +1,29 @@
+name: "IrisNet"
+input: "data"
+input_dim: 1 # batch size
+input_dim: 1
+input_dim: 1
+input_dim: 4
+
+
+layer {
+  name: "ip1"
+  type: "InnerProduct"
+  bottom: "data"
+  top: "ip1"
+  param {
+    lr_mult: 1
+  }
+  param {
+    lr_mult: 2
+  }
+  inner_product_param {
+    num_output: 2
+    weight_filler {
+      type: "xavier"
+    }
+    bias_filler {
+      type: "constant"
+    }
+  }
+}

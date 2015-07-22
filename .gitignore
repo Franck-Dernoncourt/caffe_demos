@@ -1,3 +1,8 @@
 *.project
 .pydevproject
 *.html
+*.caffemodel
+*.png
+*.solverstate
+*.txt
+*.hdf5
